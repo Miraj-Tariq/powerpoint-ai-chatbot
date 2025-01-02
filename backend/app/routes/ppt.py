@@ -29,7 +29,6 @@ async def upload_presentation(
 async def process_user_prompt(request: Request):
     try:
         data = await request.json()
-        print(f"INPUT DATA: {data}")
 
         # PPT CONTEXT
         presentation_context = PresentationContext(Settings.CURRENT_PPT)

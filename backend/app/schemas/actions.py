@@ -7,11 +7,11 @@ from pydantic import BaseModel, Field
 # Define Enums for Actions and Icons
 class ActionType(str, Enum):
     CREATE_TEXTBOX = "create_textbox"
-    UPDATE_TEXTBOX = "update_textbox"
+    # UPDATE_TEXTBOX = "update_textbox"
     CREATE_IMAGE = "create_image"
-    UPDATE_IMAGE = "update_image"
+    # UPDATE_IMAGE = "update_image"
     CREATE_ICON = "create_icon"
-    UPDATE_ICON = "update_icon"
+    # UPDATE_ICON = "update_icon"
     DELETE_SHAPE = "delete_shape"
 
 

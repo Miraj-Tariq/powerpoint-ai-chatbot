@@ -59,11 +59,11 @@ class PPTActionHandler:
         self.attached_file = attached_file
         self.action_map = {
             "create_textbox": self._create_textbox,
-            "update_textbox": self._update_textbox,
+            # "update_textbox": self._update_textbox,
             "create_image": self._create_image,
-            "update_image": self._update_image,
+            # "update_image": self._update_image,
             "create_icon": self._create_icon,
-            "update_icon": self._update_icon,
+            # "update_icon": self._update_icon,
             "delete_shape": self._delete_shape
         }
 
@@ -75,6 +75,8 @@ class PPTActionHandler:
                     parameters=action,
                     attached_file=self.attached_file if self.attached_file else None
                 )
+            if self.selected_shape_index:
+                self._delete_shape()
         except Exception as e:
             print(f"An error occurred during action execution:"
                   f"\nError Type: {type(e).__name__}"
