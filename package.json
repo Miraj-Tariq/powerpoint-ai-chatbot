@@ -1,0 +1,17 @@
+{
+  "name": "powerpoint-ai-chatbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start.be": "cd backend && (venv\\\\Scripts\\\\activate || source venv/bin/activate) && python -m uvicorn app.main:app --reload",
+    "build.be": "cd backend && python -m ensurepip --upgrade && python -m pip install --upgrade pip && python -m pip install virtualenv && python -m virtualenv venv && (venv\\Scripts\\activate || source venv/bin/activate) && pip install -r requirements.txt",
+
+    "start.fe": "cd frontend && npm start",
+    "install.fe": "cd frontend && npm install",
+    "build.fe": "cd frontend && npm install && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

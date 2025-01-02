@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ColumnsRows</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap" />
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab.active {
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .grid-item {
+      position: relative;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      width: 30%;
+      box-sizing: border-box;
+    }
+    .grid-item img {
+      max-width: 100%;
+      max-height: 150px;
+      object-fit: cover;
+      margin-bottom: 8px;
+    }
+    .grid-item input[type="checkbox"] {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    .pagination button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .pagination button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .add-to-deck {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .add-to-deck button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>ColumnsRows</h2>
+
+  <!-- Search Bar -->
+  <input type="text" id="searchInput" placeholder="Search for slides by typing down the content or the visuals" />
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="changeTab(0)">Recent slides</div>
+    <div class="tab" onclick="changeTab(1)">Most common files</div>
+    <div class="tab" onclick="changeTab(2)">Your favorite slides</div>
+    <div class="tab" onclick="changeTab(3)">Selected slides</div>
+  </div>
+
+  <!-- Images Grid -->
+  <div class="grid" id="gridContainer"></div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button id="prevPage" onclick="changePage(-1)">Previous</button>
+    <span id="pageNumber">Page 1</span>
+    <button id="nextPage" onclick="changePage(1)">Next</button>
+  </div>
+
+  <!-- Add to Deck Button -->
+  <div class="add-to-deck">
+    <button id="addToDeck" onclick="addToDeck()" disabled>Add to Deck</button>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let selectedSlides = new Set();
+    let images = [];
+
+    // Fetch data from query parameter
+    function getImagesFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const data = params.get("data");
+      images = data ? JSON.parse(decodeURIComponent(data)) : [];
+      renderImages();
+    }
+
+    function renderImages() {
+      const container = document.getElementById("gridContainer");
+      container.innerHTML = "";
+
+      images.forEach((image, index) => {
+        const item = document.createElement("div");
+        item.className = "grid-item";
+        item.innerHTML = `
+          <input type="checkbox" onclick="toggleSelect(${index})">
+          <img src="${image.url}" alt="${image.name}">
+          <p>${image.name}</p>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleSelect(index) {
+      if (selectedSlides.has(index)) {
+        selectedSlides.delete(index);
+      } else {
+        selectedSlides.add(index);
+      }
+      document.getElementById("addToDeck").disabled = selectedSlides.size === 0;
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      document.getElementById("pageNumber").innerText = `Page ${currentPage}`;
+    }
+
+    function addToDeck() {
+      alert("Slides added to deck!");
+    }
+
+    function changeTab(tabIndex) {
+      const tabs = document.querySelectorAll(".tab");
+      tabs.forEach((tab, index) => {
+        tab.classList.toggle("active", index === tabIndex);
+      });
+    }
+
+    getImagesFromQuery();
+  </script>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</body>
+</html>
