@@ -55,7 +55,7 @@ This document provides an overview of the project and references the individual 
 ### Steps
 1. **Clone the repository**: 📥
    ```bash
-   git clone https://github.com/dummy-user/powerpoint-ai-chatbot.git
+   git clone https://github.com/Miraj-Tariq/powerpoint-ai-chatbot.git
    ```
 2. **Set up the backend**: ⚙️
    ```bash
