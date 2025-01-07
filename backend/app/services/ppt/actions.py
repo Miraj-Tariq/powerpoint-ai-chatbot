@@ -13,6 +13,7 @@ from pptx.slide import Slide
 from pptx.util import Mm, Pt
 
 from app.schemas.actions import ActionsList, ShapeParameters, ParagraphAttributes
+from app.config.settings import Settings
 
 
 class PPTActionsService:
@@ -24,7 +25,7 @@ class PPTActionsService:
         if checksum != computed_checksum:
             raise HTTPException(status_code=400, detail="Checksum mismatch")
 
-        file_path = Path("current_ppt.pptx")
+        file_path = Path(Settings.LOCAL_PPT_FILENAME)
         with file_path.open("wb") as f:
             f.write(content)
 
@@ -185,7 +186,7 @@ class PPTActionHandler:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             file_path = str(self.cwd_path
                             / output_directory
-                            / f"current_ppt_{timestamp}.pptx")
+                            / f"{Settings.LOCAL_PPT_FILENAME.split('.')[0]}_{timestamp}.pptx")
 
             # Get the slide ID list element in the XML
             slide_id_list = self.presentation.slides._sldIdLst

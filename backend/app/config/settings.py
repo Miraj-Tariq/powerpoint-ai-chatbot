@@ -16,6 +16,7 @@ class Settings:
     AOAI_API_VERSION = os.getenv("AZURE_API_VERSION")
     AOAI_MODEL = os.getenv("GPT_MODEL")
 
+    LOCAL_PPT_FILENAME = os.getenv("LOCAL_PPT_FILENAME")
     CURRENT_PPT = str(current_path / os.getenv("LOCAL_PPT_FILENAME"))
 
     GPT_SERVICE = OpenAIChatService(
