@@ -86,3 +86,16 @@ For more detailed information, refer to the individual README files:
 - [Backend README](backend/README.md) 📄
 - [Frontend README](frontend/README.md) 📄
 
+## Data Flow
+1. Frontend sends query to Backend
+   - **IMPROVEMENT:** Frontend UI can be improved by adding categorizing user prompts into some basic and general actions like Insert, Update, Delete, Rewrite, Resize, Reformat etc. Moreover, content enhancement should be segregated from the slide formatting i.e. first content enhancement should be done and validated by user and then enhanced content should be formatted on slide.
+2. Backend improve user prompt, adds slide context in prompt before sending it to ChatGPT AI for processing
+   - **IMPROVEMENT:** Assistant feature can be used in ChatGPT API to improve the results further. Furthermore, ChatGPT can also be provided information in terms of slide matrix i.e. telling GPT which areas of the slide are empty and hence can be utilized. To improve results further, trained GPT model should be used which has the full knowledge and training for working with Powerpoint presentations.
+3. OpenAI converts natural language to structured JSON
+   - **IMPROVEMENT:** The structured JSON output format can be enhanced and improved further but for current use cases it is already quite generic and complete.
+4. Python-PPTX library converts JSON to PowerPoint actions
+   - **IMPROVEMENT:** A lot more icons, bullet points, fonts can be added to improve the formatting. Moreover, audit database or record should be maintained to revert back and forth to different state or versions.
+5. Python-PPTX executes actions on local PowerPoint file
+6. Modified PowerPoint file is saved locally
+7. Backend encodes PowerPoint file to base64
+8. Base64-encoded file is returned to Frontend

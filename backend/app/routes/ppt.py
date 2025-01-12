@@ -14,6 +14,25 @@ router = APIRouter()
 async def upload_presentation(
         presentation: UploadFile = File(...),
         checksum: str = Form(...)):
+    """
+        Handles the upload of a PowerPoint presentation file and verifies its integrity using a checksum.
+        \n**Parameters**
+        \n\tpresentation (UploadFile):
+            The uploaded PowerPoint presentation file. It should be sent as a multipart/form-data file.
+        \n\tchecksum (str):
+            The SHA-256 checksum of the file content sent along with the file. This is used to validate the file's integrity.
+
+        \n**Returns**
+        \n\tDict[str, str]:
+            A dictionary containing a success message and the filename where the presentation was saved.
+
+        \n**Raises**
+        \n\tHTTPException (400):
+            Raised if the provided checksum does not match the computed checksum of the uploaded file.
+
+        \n\tHTTPException (500):
+            Raised for any unexpected errors during the processing or saving of the presentation.
+    """
     try:
         return PPTActionsService.save_ppt(presentation, checksum)
     except HTTPException as e:
@@ -27,6 +46,46 @@ async def upload_presentation(
 
 @router.post("/process")
 async def process_user_prompt(request: Request):
+    """
+        Processes a user's prompt for modifying a PowerPoint presentation based on contextual data and AI-generated suggestions.
+
+        \n**Parameters**
+            \n\trequest (Request):
+                The HTTP request object containing JSON payload with the following expected structure:
+                - slidesInfo (list): Information about slides, including index.
+                - shapesInfo (optional, list): Information about shapes on the slide, including names.
+                - attached_file (optional): Additional file attached by the user.
+
+        \n**Returns**
+            \n\tDict[str, Any]:
+                A dictionary containing updated PowerPoint presentation details and the input data used for processing.
+
+        \n**Raises**
+            \n\tHTTPException (500):
+                Raised if any unexpected error occurs during the processing.
+
+        \n**Function Workflow**\n
+            1. Parse Request Data:
+               Extract and validate the JSON data from the incoming request.
+
+            2. Retrieve Slide Context:
+               - Create a `PresentationContext` object using the current PowerPoint file.
+               - Retrieve the context for a specific slide and optionally a shape if provided.
+
+            3. Prepare AI Prompt:
+               - Select a prompt template based on whether shapes information is provided.
+               - Generate user and system prompts using `PromptTemplate.generate_prompts`.
+
+            4. Invoke GPT Service:
+               - Use the GPT service to process the prompts and generate a response conforming to `ActionsList` schema.
+
+            5. Handle PowerPoint Actions:
+               - Instantiate a `PPTActionHandler` to process the GPT-generated actions.
+               - Execute the actions and save the updated presentation.
+
+            6. Return Response:
+               - Return a dictionary containing the updated presentation details and the input data.
+    """
     try:
         data = await request.json()
 
